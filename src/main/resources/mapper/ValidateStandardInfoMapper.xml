@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ronustine.splendidpro.validation.dao.ValidateStandardInfoDao">
+  <resultMap id="BaseResultMap" type="com.ronustine.splendidpro.validation.entity.po.ValidateStandardInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="standard_code" jdbcType="VARCHAR" property="standardCode" />
+    <result column="standard_name" jdbcType="VARCHAR" property="standardName" />
+    <result column="standard_desc" jdbcType="VARCHAR" property="standardDesc" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_deleted" jdbcType="CHAR" property="isDeleted" />
+  </resultMap>
+
+  <sql id="allColumn">
+    id, standard_code, standard_name, standard_desc, is_deleted
+  </sql>
+  <select id="getStandardList" resultMap="BaseResultMap">
+      SELECT
+        <include refid="allColumn"/>
+      FROM
+        mdas_standard
+      WHERE
+        is_deleted in ('n','N')
+  </select>
+</mapper>

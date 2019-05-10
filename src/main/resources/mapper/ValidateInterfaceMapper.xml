@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ronustine.splendidpro.validation.dao.ValidateInterfaceDao">
+  <resultMap id="BaseResultMap" type="com.ronustine.splendidpro.validation.entity.po.ValidateInterface">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="standard_id" jdbcType="BIGINT" property="standardId" />
+    <result column="interface_name" jdbcType="VARCHAR" property="interfaceName" />
+    <result column="interface_code" jdbcType="VARCHAR" property="interfaceCode" />
+    <result column="interface_desc" jdbcType="VARCHAR" property="interfaceDesc" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_deleted" jdbcType="CHAR" property="isDeleted" />
+  </resultMap>
+
+  <sql id="allColumn">
+    id, standard_id, interface_name, interface_code, interface_desc, is_deleted
+  </sql>
+
+  <select id="getStandardInterface" resultMap="BaseResultMap">
+    SELECT
+      interface.id,
+      interface.standard_id,
+      interface.interface_name,
+      interface.interface_code,
+      interface.interface_desc,
+      interface.is_deleted
+    FROM
+      mdas_standard_interface interface
+    INNER JOIN
+      mdas_standard standard
+    ON
+      interface.standard_id = standard.id
+    WHERE
+      standard.standard_code = #{standardCode}
+    AND
+      interface.is_deleted in ('n','N')
+    AND
+      standard.is_deleted in ('n','N')
+
+  </select>
+
+</mapper>

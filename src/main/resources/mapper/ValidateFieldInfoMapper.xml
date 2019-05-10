@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ronustine.splendidpro.validation.dao.ValidateFieldInfoDao">
+  <resultMap id="BaseResultMap" type="com.ronustine.splendidpro.validation.entity.po.ValidateFieldInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="interface_id" jdbcType="BIGINT" property="interfaceId" />
+    <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
+    <result column="field_code" jdbcType="VARCHAR" property="fieldCode" />
+    <result column="field_desc" jdbcType="VARCHAR" property="fieldDesc" />
+    <result column="data_type" jdbcType="VARCHAR" property="dataType" />
+    <result column="data_enum" jdbcType="VARCHAR" property="dataEnum" />
+    <result column="parent_field" jdbcType="VARCHAR" property="parentField" />
+    <result column="field_level" jdbcType="VARCHAR" property="fieldLevel" />
+    <result column="is_parent" jdbcType="VARCHAR" property="isParent" />
+    <result column="index_level" jdbcType="INTEGER" property="indexLevel" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_deleted" jdbcType="CHAR" property="isDeleted" />
+  </resultMap>
+
+  <insert id="insertCodeBatch" parameterType="java.util.List">
+    insert into mdas_standard_field
+    (interface_id, field_name, field_code, parent_field, is_parent, index_level)
+    values
+    <foreach collection="list" index="index" item="mdasStandardField" separator=",">
+      (
+      #{mdasStandardField.interfaceId},
+      #{mdasStandardField.fieldName},
+      #{mdasStandardField.fieldCode},
+      #{mdasStandardField.parentField},
+      #{mdasStandardField.isParent},
+      #{mdasStandardField.indexLevel}
+      )
+    </foreach>
+  </insert>
+</mapper>
