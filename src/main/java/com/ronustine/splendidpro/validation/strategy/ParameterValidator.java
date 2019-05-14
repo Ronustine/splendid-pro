@@ -7,7 +7,6 @@ import com.ronustine.splendidpro.utils.SpringContextHolder;
 import com.ronustine.splendidpro.utils.StringCalculate;
 import com.ronustine.splendidpro.validation.entity.dto.ValidateDetailDTO;
 import com.ronustine.splendidpro.validation.entity.po.ValidateFieldInfo;
-import com.ronustine.splendidpro.validation.entity.po.ValidateDetail;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,17 +32,65 @@ public abstract class ParameterValidator {
 	public static final Map<String, ParameterValidator> PARAMETER_VALIDATOR_MAP = new ConcurrentHashMap<>();
 	final static String CLASS_DEFAULT = "DefaultInterfaceFieldValidator";
 
-	static final char[] ACCEPTABLE_ZH_CHAR = "()-".toCharArray();
+	static final char[] ACCEPTABLE_PUNCTUATION_CHAR = "（）()- ".toCharArray();
+
 	/**
-	 * 中文校验，含全角、半角标点符号
+	 * 中文名称校验，允许的仅为：中文、以及常量 ACCEPTABLE_PUNCTUATION_CHAR 列出的符号
+	 *
 	 * @param str
 	 * @return
 	 */
-	public static boolean isZh(String str) {
+	public static boolean isZhName(String str) {
 		char[] chars = str.toCharArray();
 		for (char oChar: chars) {
+			// 0~9
+			if ((oChar >= 48 && oChar <= 57)) {
+				continue;
+			}
+
+			// 可接受的符号
 			boolean acceptable = false;
-			for (char c: ACCEPTABLE_ZH_CHAR) {
+			for (char c: ACCEPTABLE_PUNCTUATION_CHAR) {
+				if (c == oChar) {
+					acceptable = true;
+					break;
+				}
+			}
+
+			// 中文
+			Character.UnicodeBlock ub = Character.UnicodeBlock.of(oChar);
+			if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
+					|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
+					|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A) {
+				continue;
+			}
+
+			if (acceptable) {
+				continue;
+			}
+			// 既不是中文、也不是可接受的标点符号
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 中英文名称校验，允许的仅为：中文、A~Z a~z、以及常量 ACCEPTABLE_PUNCTUATION_CHAR 列出的符号
+	 * @param str
+	 * @return
+	 */
+	public static boolean isEnZhName(String str) {
+		char[] chars = str.toCharArray();
+		for (char oChar: chars) {
+			if ((oChar >= 48 && oChar <= 57) ||
+					(oChar >= 65 && oChar <= 90) ||
+					(oChar >= 97 && oChar <= 122)) {
+				// 0~9 A~Z a~z
+				continue;
+			}
+
+			boolean acceptable = false;
+			for (char c: ACCEPTABLE_PUNCTUATION_CHAR) {
 				if (c == oChar) {
 					acceptable = true;
 					break;
@@ -53,40 +100,15 @@ public abstract class ParameterValidator {
 			Character.UnicodeBlock ub = Character.UnicodeBlock.of(oChar);
 			if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
 					|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
-					|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
-					|| ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
-					|| ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION) {
+					|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A) {
 				continue;
-			} if (acceptable) {
-				continue;
-			} else {
-				return false;
 			}
-		}
-		return true;
-	}
 
-
-	/**
-	 * 中英文校验
-	 * @param str
-	 * @return
-	 */
-	public static boolean isEnZh(String str) {
-		char[] chars = str.toCharArray();
-		for (char oChar: chars) {
-			Character.UnicodeBlock ub = Character.UnicodeBlock.of(oChar);
-			if (ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS
-					|| ub == Character.UnicodeBlock.CJK_COMPATIBILITY_IDEOGRAPHS
-					|| ub == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A
-					|| ub == Character.UnicodeBlock.GENERAL_PUNCTUATION
-//					|| ub == Character.UnicodeBlock.CJK_SYMBOLS_AND_PUNCTUATION // 不要标点符号
-//					|| ub == Character.UnicodeBlock.HALFWIDTH_AND_FULLWIDTH_FORMS // 全角半角
-					|| ub == Character.UnicodeBlock.BASIC_LATIN) {
+			if (acceptable) {
 				continue;
-			} else {
-				return false;
 			}
+			// 既不是中文、也不是可接受的标点符号
+			return false;
 		}
 		return true;
 	}
@@ -307,7 +329,7 @@ public abstract class ParameterValidator {
 			ValidateDetailDTO.setFieldName(validateFieldInfo.getFieldName());
 
 			//		log.info("	设置Detail内容：字段[{}][{}]校验不通过，[{}]", validateFieldInfo.getFieldName(), key, interfaceFieldEnum.getQueryDesc());
-			ValidateDetailDTO.setPass(YesNoEnum.NO.getCode());
+			ValidateDetailDTO.setPass(YesNoEnum.NO.getBool());
 			ValidateDetailDTO.setFieldId(validateFieldInfo.getId());
 			detail.put(key, ValidateDetailDTO);
 		}

@@ -391,7 +391,7 @@ public class ValidationFieldServiceImpl implements ValidationFieldService {
 						// 空值，不校验
 						continue;
 					}
-					if (ParameterValidator.isZh((String)value)) {
+					if (ParameterValidator.isZhName((String)value)) {
 						// 是中文
 						continue;
 					}
@@ -401,7 +401,7 @@ public class ValidationFieldServiceImpl implements ValidationFieldService {
 						// 空值，不校验
 						continue;
 					}
-					if (ParameterValidator.isEnZh((String)value)) {
+					if (ParameterValidator.isEnZhName((String)value)) {
 						// 是中文英文混合
 						continue;
 					}
