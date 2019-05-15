@@ -10,13 +10,13 @@ import lombok.Data;
 public class ResponseBean<T> {
 
     private Boolean success;
-    private String message;
+    private String msg;
     private String code;
     private T result;
 
     private ResponseBean(Builder<T> builder) {
         this.success = builder.success;
-        this.message = builder.message;
+        this.msg = builder.msg;
         this.code = builder.code;
         this.result = builder.result;
     }
@@ -31,7 +31,7 @@ public class ResponseBean<T> {
 
         private Boolean success = false;
 
-        private String  message;
+        private String msg;
 
         private String  code;
 
@@ -43,35 +43,35 @@ public class ResponseBean<T> {
         public Builder<T> success() {
             this.success = true;
             this.code = SpErrorCodeEnum.REQUEST_SUCCESS_200.getCode();
-            this.message = SpErrorCodeEnum.REQUEST_SUCCESS_200.getDesc();
+            this.msg = SpErrorCodeEnum.REQUEST_SUCCESS_200.getDesc();
             return this;
         }
 
-        public Builder<T> success(String message) {
+        public Builder<T> success(String msg) {
             this.success = true;
             this.code = SpErrorCodeEnum.REQUEST_SUCCESS_200.getCode();
-            this.message = message;
+            this.msg = msg;
             return this;
         }
 
-        public Builder<T> fail(String code, String message) {
+        public Builder<T> fail(String code, String msg) {
             this.success = false;
             this.code = code;
-            this.message = message;
+            this.msg = msg;
             return this;
         }
 
         public Builder<T> fail(SpErrorCodeEnum errorCodeEnum) {
             this.success = false;
             this.code = errorCodeEnum.getCode();
-            this.message = errorCodeEnum.getDesc();
+            this.msg = errorCodeEnum.getDesc();
             return this;
         }
 
         public Builder<T> fail(ResponseBean responseBean) {
             this.success = false;
             this.code = responseBean.getCode();
-            this.message = responseBean.getMessage();
+            this.msg = responseBean.getMsg();
             return this;
         }
 
