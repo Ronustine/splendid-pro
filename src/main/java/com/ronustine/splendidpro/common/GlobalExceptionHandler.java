@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * 类GlobalExceptionHandler的实现描述：全局
+ * 类GlobalExceptionHandler的实现描述：统一异常处理
  *
  * @author ronustine
  */
