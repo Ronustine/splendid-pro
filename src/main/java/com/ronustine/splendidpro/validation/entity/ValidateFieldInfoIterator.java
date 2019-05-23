@@ -9,14 +9,14 @@ import java.util.Stack;
 /**
  * @Description 字段的迭代器
  * @Author ronustine
- * @Date 2018/9/20/0020
+ * @Date 2018/9/20/
  */
 public class ValidateFieldInfoIterator implements Iterator<ValidateFieldInfoDTO> {
 
 	// LinkedList
-	private Stack<Iterator> stack = new Stack<>();
+	private Stack<Iterator<ValidateFieldInfoDTO>> stack = new Stack();
 
-	public ValidateFieldInfoIterator(Iterator iterator) {
+	public ValidateFieldInfoIterator(Iterator<ValidateFieldInfoDTO> iterator) {
 		stack.push(iterator);
 	}
 
@@ -39,10 +39,12 @@ public class ValidateFieldInfoIterator implements Iterator<ValidateFieldInfoDTO>
 		if (hasNext()) {
 			Iterator iterator = stack.peek();
 			ValidateFieldInfoDTO component = (ValidateFieldInfoDTO) iterator.next();
-			if (component instanceof ValidateFieldInfoDTO) {
-				Iterator subIterator = component.createIterator();
-				if (null != subIterator && !stack.contains(subIterator)) {
-					stack.push(subIterator);
+			ValidateFieldInfoIterator subIterator = (ValidateFieldInfoIterator)component.createIterator();
+			if (null != subIterator) {
+				for (Iterator<ValidateFieldInfoDTO> iter: subIterator.stack){
+					if (!stack.contains(iter)) {
+						stack.push(iter);
+					}
 				}
 			}
 			return component;
