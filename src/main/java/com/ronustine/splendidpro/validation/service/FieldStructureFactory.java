@@ -87,12 +87,9 @@ public class FieldStructureFactory {
 		while (true) {
 			Future<ValidateFieldInfoDTO> f = FILED_TREEMAP.get(interfaceId);
 			if (f == null) {
-				Callable<ValidateFieldInfoDTO> fieldTreeC = new Callable<ValidateFieldInfoDTO>() {
-					@Override
-					public ValidateFieldInfoDTO call () throws InterruptedException {
-						log.info("获取字段树");
-						return validateFieldInfoService.getStructureByInterfaceId(interfaceId);
-					}
+				Callable<ValidateFieldInfoDTO> fieldTreeC = () -> {
+					log.info("获取字段树");
+					return validateFieldInfoService.getStructureByInterfaceId(interfaceId);
 				};
 				FutureTask ft = new FutureTask<ValidateFieldInfoDTO>(fieldTreeC);
 				f = FILED_TREEMAP.putIfAbsent(interfaceId, ft);
@@ -120,7 +117,7 @@ public class FieldStructureFactory {
 		Map<String, ValidateFieldInfo> fieldStructures;
 		fieldStructures = FIELD_STRUCTURE_MAP.get(interfaceId);
 		Long createTime = INTERFACE_FIELD_STRUCTURE_TIME.get(interfaceId);
-		Long currentTime = new Long(System.currentTimeMillis());
+		Long currentTime = System.currentTimeMillis();
 		if (null == createTime ||
 				currentTime - createTime > VALID_TIME){
 			return null;
@@ -136,7 +133,7 @@ public class FieldStructureFactory {
 	private void checkValid(String interfaceId){
 		Future<ValidateFieldInfoDTO> f = FILED_TREEMAP.get(interfaceId);
 		Long createTime = INTERFACE_FIELD_TREE_TIME.get(interfaceId);
-		Long currentTime = new Long(System.currentTimeMillis());
+		Long currentTime = System.currentTimeMillis();
 		if (null == createTime ||
 				currentTime - createTime > VALID_TIME){
 			log.info("字段树缓存过期，重新获取");

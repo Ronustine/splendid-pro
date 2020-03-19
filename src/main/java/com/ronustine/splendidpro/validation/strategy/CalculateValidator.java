@@ -89,8 +89,8 @@ public class CalculateValidator {
      */
     private StringBuilder toTrueFormula (String formula, String currentCode, Map<String, Object> validateData) {
         Matcher matcher = VARIANT_PATTERN.matcher(formula);
-        List<String> formulaParams = new ArrayList();
-        List<String> fieldParams = new ArrayList();
+        List<String> formulaParams = new ArrayList<>();
+        List<String> fieldParams = new ArrayList<>();
         // 获取所有$开头的变量
         while(matcher.find()){
             formulaParams.add(matcher.group(0));
@@ -160,8 +160,5 @@ public class CalculateValidator {
         ThreadLocalMapUtil.set(SCRIPT_ENGINE_JS, engine);
         return engine;
     }
-
-    public static void main(String[] args) {}
-
 
 }
