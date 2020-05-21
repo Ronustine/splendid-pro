@@ -1,5 +1,6 @@
 package com.ronustine.splendidpro.domain.mapping.entity;
 
+import com.ronustine.splendidpro.domain.Status;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -7,7 +7,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
 @EnableSwagger2
-@MapperScan("com.ronustine.splendidpro.**.dao")
+@MapperScan({"com.ronustine.splendidpro.**.dao", "com.ronustine.splendidpro.**.repository"})
 public class SplendidProApplication {
 
     public static void main(String[] args) {
