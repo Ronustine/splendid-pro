@@ -1,21 +1,13 @@
+spring:
+  application:
+    name: splendid-pro
+  profiles:
+    active: '@spring.profiles.active@'
+
 server:
   port: 8082
   servlet:
-    context-path: /splendid
-
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/splendid_pro?characterEncoding=utf8&serverTimezone=GMT%2B8
-    username: root
-    password: root
-    type: com.alibaba.druid.pool.DruidDataSource
-    #连接池参数，初始数、最大数、最小数、获取连接等待超时时间（毫秒）
-    initial-size: 5
-    min-idle: 5
-    max-active: 20
-    max-wait: 60000
-    filters: stat,wall,log4j
+    context-path: /${spring.application.name}
 
 #指定mapper*:xml加载位置
 mybatis:
