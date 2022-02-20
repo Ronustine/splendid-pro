@@ -1,31 +1,36 @@
 package com.ronustine.splendidpro.common.constant;
 
+import com.ronustine.splendidpro.common.exception.CustomException;
+import lombok.Getter;
+
 /**
  * @author ronustine
  * 错误码
  */
-public enum SpErrorCodeEnum {
+@Getter
+public enum SpErrorCodeEnum implements CustomException {
 
     // 错误码集合
-    REQUEST_SUCCESS_200("200","请求成功"),
+    REQUEST_SUCCESS_200(200,"请求成功", ""),
 
-    ERROR_CORE_1000("1000", "系统错误");
+    ERROR_CORE_1000(1000, "XXX参数异常", "系统内部错误"),
 
-	SpErrorCodeEnum(String code, String desc) {
+
+    ;
+
+	SpErrorCodeEnum(Integer code, String debugMsg, String readableMsg) {
 		this.code = code;
-        this.desc = desc;
+        this.debugMsg = debugMsg;
+        this.readableMsg = readableMsg;
     }
 
-    private String code;
-    private String desc;
+    private final Integer code;
+    private final String debugMsg;
+    private final String readableMsg;
 
-    public String getCode() {
-        return code;
+    @Override
+    public String systemMark() {
+        return "SP";
     }
-
-    public String getDesc() {
-        return desc;
-    }
-
 }
 

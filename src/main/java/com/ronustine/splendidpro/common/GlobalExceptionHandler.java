@@ -2,6 +2,7 @@ package com.ronustine.splendidpro.common;
 
 import com.ronustine.splendidpro.common.constant.SpErrorCodeEnum;
 import com.ronustine.splendidpro.common.exception.BaseException;
+import com.ronustine.splendidpro.common.exception.CustomExceptionHandler;
 import com.ronustine.splendidpro.common.exception.SpBusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +28,16 @@ public class GlobalExceptionHandler {
     @ResponseBody
     ResponseBean handleException(Exception e) {
         log.error("系统内部错误，响应系统内部错误，具体错误见下", e);
-        return ResponseBean.builder().fail(SpErrorCodeEnum.ERROR_CORE_1000).build();
+        // 覆盖内部错误再返回
+        SpBusinessException spBusinessException = new SpBusinessException(SpErrorCodeEnum.ERROR_CORE_1000);
+        return ResponseBean.builder().fail(spBusinessException.getResultCode(), spBusinessException.getResultMsg()).build();
     }
 
     /**
      * 业务异常
      * @return
      */
-    @ExceptionHandler(SpBusinessException.class)
+    @ExceptionHandler(BaseException.class)
     @ResponseBody
     ResponseBean handleBusinessException(BaseException e) {
         log.error("系统业务错误，响应错误内容：[{}]", e.getResultMsg());

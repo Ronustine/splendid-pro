@@ -34,25 +34,28 @@ public class StreamController {
         final StreamingResponseBody body = new StreamingResponseBody() {
             @Override
             public void writeTo(final OutputStream outputStream) throws IOException {
-                final String title = "id,名称,名称,名称,名称,名称,名称,";
+                final String title = "id,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称," +
+                        "名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称,名称";
                 outputStream.write(title.getBytes());
                 final AtomicInteger i = new AtomicInteger();
                 while (true) {
                     final int id = i.getAndIncrement();
                     final String alphabetic = RandomStringUtils.randomAlphabetic(10);
-                    String temp = MessageFormat.format("{0},{1},{2},{3},{4},{5}\n",
-                            id, alphabetic, alphabetic, alphabetic, alphabetic, alphabetic
-                    );
+                    String temp = MessageFormat.format(
+                            "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}," +
+                                    "{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27}," +
+                                    "{28},{29},{30},{31},{32},{33},{34},{35},{36}\n",
+                            id, alphabetic, alphabetic, alphabetic, alphabetic, alphabetic, alphabetic,
+                             alphabetic, alphabetic, alphabetic, alphabetic, alphabetic, alphabetic,
+                            alphabetic, alphabetic, alphabetic, alphabetic, alphabetic, alphabetic,
+                            alphabetic, alphabetic, alphabetic, alphabetic, alphabetic, alphabetic,
+                            alphabetic, alphabetic, alphabetic, alphabetic, alphabetic, alphabetic,
+                            alphabetic, alphabetic, alphabetic, alphabetic, alphabetic, alphabetic);
                     log.info(temp);
                     outputStream.write(temp.getBytes());
                     outputStream.flush();
 
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (id >= 1000) {
+                    if (id >= 50000) {
                         return;
                     }
                 }

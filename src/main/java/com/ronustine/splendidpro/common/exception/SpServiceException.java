@@ -3,9 +3,11 @@ package com.ronustine.splendidpro.common.exception;
 
 /**
  * 类SpServiceException的实现描述：系统内部错误
- *
+ * 一个服务一个exception够用
+ * @see SpBusinessException
  * @author ronustine
  */
+@Deprecated
 public class SpServiceException extends RuntimeException{
 
 

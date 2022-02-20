@@ -1,94 +1,58 @@
 package com.ronustine.splendidpro.common.exception;
 
-
-import com.ronustine.splendidpro.common.constant.SpErrorCodeEnum;
+import lombok.Getter;
 
 /**
  * 类BaseException的实现描述：业务异常
  *
  * @author ronustine
  */
+@Getter
 public class BaseException extends RuntimeException{
 
     private String resultCode;
     private String resultMsg;
 
     /**
-     * @param msg 内部打日志用的错误信息
-     * @param spErrorCodeEnum
+     * 性能最高
+     * 此方法默认没有cause，不记录堆栈信息，适用于明确、清晰知道业务发生错误的情况。
+     * @param handler 异常组装
      */
-    public BaseException(String msg, SpErrorCodeEnum spErrorCodeEnum) {
-        super(msg);
-        this.resultCode = spErrorCodeEnum.getCode();
-        this.resultMsg = spErrorCodeEnum.getDesc();
+    public BaseException(CustomExceptionHandler handler) {
+        this(handler, false);
+        this.resultCode = handler.errorCode();
+        this.resultMsg = handler.readableMsg();
     }
 
     /**
-     * @param msg 内部打日志用的错误信息
-     * @param cause
-     * @param spErrorCodeEnum
+     * 包含message, 可指定是否记录异常
+     * @param handler 信息
+     * @param recordStackTrace 是否记录异常
      */
-    public BaseException(String msg, Throwable cause, SpErrorCodeEnum spErrorCodeEnum) {
-        super(msg, cause);
-        this.resultCode = spErrorCodeEnum.getCode();
-        this.resultMsg = spErrorCodeEnum.getDesc();
+    public BaseException(CustomExceptionHandler handler, boolean recordStackTrace) {
+        super(handler.codeDebugMsg(), null, false, recordStackTrace);
+        this.resultCode = handler.errorCode();
+        this.resultMsg = handler.readableMsg();
     }
 
     /**
-     * @param msg 内部打日志用的错误信息
-     * @param resultCode
-     * @param resultMsg 接口返回给外部的信息
+     * 包含message和cause, 会记录栈异常
+     * @param handler 信息
+     * @param cause cause by
      */
-    public BaseException(String msg, String resultCode, String resultMsg) {
-        super(msg);
-        this.resultCode = resultCode;
-        this.resultMsg = resultMsg;
+    public BaseException(CustomExceptionHandler handler, Throwable cause) {
+        super(handler.codeDebugMsg(), cause, false, true);
+        this.resultCode = handler.errorCode();
+        this.resultMsg = handler.readableMsg();
     }
 
     /**
-     * @param msg 内部打日志用的错误信息
-     * @param resultCode
-     */
-    public BaseException(String msg, String resultCode) {
-        super(msg);
-        this.resultCode = resultCode;
-        this.resultMsg = msg;
-    }
+     * 重写，禁止抓取堆栈信息
+     * 原因：业务异常，业务原因写明白即可，无需底层堆栈错误信息
+     * @return 自己
 
-
-    /**
-     * @param msg 内部打日志用的错误信息
-     * @param cause
-     * @param resultCode
-     * @param resultMsg 接口返回给外部的信息
-     */
-    public BaseException(String msg, Throwable cause, String resultCode, String resultMsg) {
-        super(msg, cause);
-        this.resultCode = resultCode;
-        this.resultMsg = resultMsg;
-    }
-
-    public BaseException(String msg) {
-        super(msg);
-    }
-
-    public BaseException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
-
-    public String getResultCode() {
-        return resultCode;
-    }
-
-    public void setResultCode(String resultCode) {
-        this.resultCode = resultCode;
-    }
-
-    public String getResultMsg() {
-        return resultMsg;
-    }
-
-    public void setResultMsg(String resultMsg) {
-        this.resultMsg = resultMsg;
-    }
+     @Override
+     public synchronized Throwable fillInStackTrace() {
+     return this;
+     }*/
 }

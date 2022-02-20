@@ -1,6 +1,7 @@
 package com.ronustine.splendidpro.common;
 
 import com.ronustine.splendidpro.common.constant.SpErrorCodeEnum;
+import com.ronustine.splendidpro.common.exception.CustomExceptionHandler;
 import lombok.Data;
 
 /**
@@ -41,15 +42,18 @@ public class ResponseBean<T> {
         }
 
         public Builder<T> success() {
+            CustomExceptionHandler success = CustomExceptionHandler.builder().
+                customException(SpErrorCodeEnum.REQUEST_SUCCESS_200).build();
+
             this.success = true;
-            this.code = SpErrorCodeEnum.REQUEST_SUCCESS_200.getCode();
-            this.msg = SpErrorCodeEnum.REQUEST_SUCCESS_200.getDesc();
+            this.code = SpErrorCodeEnum.REQUEST_SUCCESS_200.getCode() + "";
+            this.msg = success.readableMsg();
             return this;
         }
 
         public Builder<T> success(String msg) {
             this.success = true;
-            this.code = SpErrorCodeEnum.REQUEST_SUCCESS_200.getCode();
+            this.code = SpErrorCodeEnum.REQUEST_SUCCESS_200.getCode() + "";
             this.msg = msg;
             return this;
         }
@@ -58,13 +62,6 @@ public class ResponseBean<T> {
             this.success = false;
             this.code = code;
             this.msg = msg;
-            return this;
-        }
-
-        public Builder<T> fail(SpErrorCodeEnum errorCodeEnum) {
-            this.success = false;
-            this.code = errorCodeEnum.getCode();
-            this.msg = errorCodeEnum.getDesc();
             return this;
         }
 
